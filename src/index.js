@@ -1,14 +1,11 @@
 
-fetch("http://localhost:3003/images")
+fetch("http://localhost:3500/images")
 .then (resp => resp.json())
 .then ((data) => {
   for (let image of data) {
     createImageCard(image);
   }
 });
-
-
-
 
 
 function createImageCard(image) {
