@@ -1,16 +1,39 @@
 
-fetch("http://localhost:3500/images")
+fetch("http://localhost:5000/images")
 .then (resp => resp.json())
 .then ((data) => {
   for (let image of data) {
     createImageCard(image);
   }
-});
+})
+
+
+
+
+function updateImageOnServer(image) {
+  return fetch(`http://localhost:5000/images/${image.id}`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(image)
+  }).then(resp => resp.json())
+}
+
+function deleteCommentOnServer(id) {
+  return fetch(`http://localhost:5000/comments/${id}`, {
+      method: 'DELETE'
+  }).then(resp => resp.json())
+}
 
 
 function createImageCard(image) {
+
     let section = document.querySelector(".image-container");
+    if(section === null) return
   
+    // section.textContent= ''
+
     let article = document.createElement("article");
     article.className = "image-card";
   
@@ -32,7 +55,16 @@ function createImageCard(image) {
     let button = document.createElement("button");
     button.className = "like-button";
     button.textContent = "♥";
+
+    button.addEventListener('click', function (){
+    image.likes++
+
+    updateImageOnServer(image)
+    // render (image)
   
+
+    })
+ 
     let ul = document.createElement("ul");
   
     for (let comment of image.comments) {
